@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Backend API service
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    env_file:
+      - .env
+    volumes:
+      # Mount source code for development
+      - ./server:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - dicom-network
+
+  # Future: Frontend service (placeholder for SPA)
+  # frontend:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "3001:80"
+  #   volumes:
+  #     - ./frontend/dist:/usr/share/nginx/html
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - dicom-network
+
+networks:
+  dicom-network:
+    driver: bridge
+
+volumes:
+  node_modules:

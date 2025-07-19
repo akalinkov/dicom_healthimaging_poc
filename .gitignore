@@ -79,3 +79,21 @@ ENV/
 *.bak
 *.backup
 *.orig
+
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfplan.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.auto.tfvars
+
+# Server specific
+server/node_modules/
+server/.env
+server/package-lock.json
+
+# Docker
+.dockerignore
