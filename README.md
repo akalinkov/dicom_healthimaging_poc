@@ -43,9 +43,90 @@ This is a proof of concept project intended to validate technical feasibility an
 - DICOM test data imported into AWS HealthImaging datastore
 - Appropriate AWS IAM permissions for HealthImaging operations
 
+## Architecture
+
+This POC consists of:
+
+- **Terraform Infrastructure**: IAM policies and users with least privilege access
+- **Express.js Backend**: RESTful API with AWS HealthImaging SDK integration
+- **Docker Setup**: Containerized development environment
+- **Mock Mode**: Development mode with simulated responses
+
+## API Endpoints
+
+- `POST /search` - Search DICOM image sets by metadata
+- `GET /view/:id` - Get image set metadata for viewing
+- `GET /view/:id/frame/:frameId` - Get specific image frame
+- `GET /download/:id/frame/:frameId` - Download image frame
+- `GET /health` - Health check endpoint
+
 ## Getting Started
 
-_Instructions for setup and deployment will be added as the project develops._
+### 1. Infrastructure Setup (Terraform)
+
+```bash
+# Initialize Terraform
+terraform init
+
+# Plan the infrastructure
+terraform plan
+
+# Apply the infrastructure
+terraform apply
+
+# Get the AWS credentials (sensitive output)
+terraform output -json
+```
+
+### 2. Environment Configuration
+
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Add the AWS credentials from Terraform output to .env
+# AWS_ACCESS_KEY_ID=your_access_key_here
+# AWS_SECRET_ACCESS_KEY=your_secret_key_here
+```
+
+### 3. Local Development (Docker)
+
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or run without Docker:
+cd server
+npm install
+npm run dev
+```
+
+### 4. Local Development (Node.js)
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+### 5. Testing the API
+
+```bash
+# Health check
+curl http://localhost:3000/health
+
+# Search for DICOM images (mock mode)
+curl -X POST http://localhost:3000/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "patientName": "John Doe",
+    "modality": "CT",
+    "datastoreId": "test-datastore"
+  }'
+
+# View image set metadata
+curl "http://localhost:3000/view/mock-image-set-1?datastoreId=test-datastore"
+```
 
 ## License
 
