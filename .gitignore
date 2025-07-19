@@ -81,14 +81,14 @@ ENV/
 *.orig
 
 # Terraform files
-*.tfstate
-*.tfstate.*
-*.tfplan
-*.tfplan.*
-.terraform/
-.terraform.lock.hcl
-terraform.tfvars
-*.auto.tfvars
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfplan
+terraform/*.tfplan.*
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfvars
+terraform/*.auto.tfvars
 
 # Server specific
 server/node_modules/

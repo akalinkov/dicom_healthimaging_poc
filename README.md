@@ -65,6 +65,9 @@ This POC consists of:
 ### 1. Infrastructure Setup (Terraform)
 
 ```bash
+# Navigate to terraform directory
+cd terraform
+
 # Initialize Terraform
 terraform init
 
@@ -76,6 +79,9 @@ terraform apply
 
 # Get the AWS credentials (sensitive output)
 terraform output -json
+
+# Return to project root
+cd ..
 ```
 
 ### 2. Environment Configuration
