@@ -19,6 +19,9 @@ export default {
         version: 1,
         createdAt: new Date('2024-01-01').toISOString(),
         updatedAt: new Date('2024-01-01').toISOString(),
+        seriesCount: 3,
+        imageCount: 150,
+        imageSizeInBytes: 125000000, // ~119 MB
         DICOMTags: {
           DICOMPatientName: 'John Doe',
           DICOMPatientId: '12345',
@@ -26,6 +29,7 @@ export default {
           DICOMModality: 'CT',
           DICOMStudyDescription: 'Chest CT Scan',
           DICOMStudyInstanceUID: '1.2.3.4.5.6.7.8.9.0.1',
+          DICOMAccessionNumber: 'ACC001',
         },
       },
       {
@@ -33,6 +37,9 @@ export default {
         version: 1,
         createdAt: new Date('2024-01-02').toISOString(),
         updatedAt: new Date('2024-01-02').toISOString(),
+        seriesCount: 2,
+        imageCount: 85,
+        imageSizeInBytes: 89600000, // ~85.4 MB
         DICOMTags: {
           DICOMPatientName: 'Jane Smith',
           DICOMPatientId: '67890',
@@ -40,6 +47,7 @@ export default {
           DICOMModality: 'MRI',
           DICOMStudyDescription: 'Brain MRI',
           DICOMStudyInstanceUID: '1.2.3.4.5.6.7.8.9.0.2',
+          DICOMAccessionNumber: 'ACC002',
         },
       },
       {
@@ -47,13 +55,35 @@ export default {
         version: 1,
         createdAt: new Date('2024-01-03').toISOString(),
         updatedAt: new Date('2024-01-03').toISOString(),
+        seriesCount: 1,
+        imageCount: 2,
+        imageSizeInBytes: 2400000, // ~2.3 MB
         DICOMTags: {
           DICOMPatientName: 'Bob Johnson',
           DICOMPatientId: '11111',
           DICOMStudyDate: '20240103',
-          DICOMModality: 'X-Ray',
+          DICOMModality: 'XR',
           DICOMStudyDescription: 'Chest X-Ray',
           DICOMStudyInstanceUID: '1.2.3.4.5.6.7.8.9.0.3',
+          DICOMAccessionNumber: 'ACC003',
+        },
+      },
+      {
+        imageSetId: 'mock-image-set-4',
+        version: 1,
+        createdAt: new Date('2024-01-04').toISOString(),
+        updatedAt: new Date('2024-01-04').toISOString(),
+        seriesCount: 4,
+        imageCount: 200,
+        imageSizeInBytes: 156000000, // ~148.8 MB
+        DICOMTags: {
+          DICOMPatientName: 'Alice Cooper',
+          DICOMPatientId: '22222',
+          DICOMStudyDate: '20240104',
+          DICOMModality: 'CT',
+          DICOMStudyDescription: 'Abdominal CT',
+          DICOMStudyInstanceUID: '1.2.3.4.5.6.7.8.9.0.4',
+          DICOMAccessionNumber: 'ACC004',
         },
       },
     ],

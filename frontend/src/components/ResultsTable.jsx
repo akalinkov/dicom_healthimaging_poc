@@ -95,9 +95,6 @@ const ResultsTable = ({ results, isLoading, error }) => {
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                 Accession
               </th>
-              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                Series/Images
-              </th>
               <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider'>
                 Actions
               </th>
@@ -127,9 +124,6 @@ const ResultsTable = ({ results, isLoading, error }) => {
                 </td>
                 <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
                   {imageSet.DICOMTags.DICOMAccessionNumber || 'N/A'}
-                </td>
-                <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                  {imageSet.seriesCount || 1} / {imageSet.imageCount || 'N/A'}
                 </td>
                 <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium'>
                   <div className='flex justify-end space-x-2'>

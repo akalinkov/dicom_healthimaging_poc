@@ -39,7 +39,7 @@ class HealthImagingService {
       });
 
       const response = await this.client.send(command);
-      console.log('Simple search successful. Response:', response);
+      console.log('Simple search successful. Response:', JSON.stringify(response, null, 2));
       return response;
     } catch (error) {
       console.error('Error searching image sets:', error);

@@ -11,14 +11,20 @@ const SearchForm = ({ onSearch, isLoading }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!formData.patientName && !formData.modality) {
-      logger.warn('Search attempted with no criteria', formData);
-      return;
-    }
+    // For this POC, allow searching with any combination:
+    // - Patient name only
+    // - Specific modality only  
+    // - All modalities (empty modality)
+    // - Patient name + modality
+    // - Patient name + all modalities
+    
+    const searchData = {
+      patientName: formData.patientName ? formData.patientName.trim() : '',
+      modality: formData.modality ? formData.modality.trim() : ''
+    };
 
-    logger.info('Search form submitted', formData);
-    onSearch(formData);
+    logger.info('Search form submitted', searchData);
+    onSearch(searchData);
   };
 
   const handleInputChange = (e) => {
