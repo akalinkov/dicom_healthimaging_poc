@@ -22,55 +22,10 @@ Proof of concept demonstrating React frontend integration with AWS HealthImaging
 ### 1. Infrastructure Setup (Terraform)
 
 ```bash
-# Navigate to terraform directory
 cd terraform
-
-# Initialize Terraform
 terraform init
-
-# Plan the infrastructure
 terraform plan
-
-# Apply the infrastructure
 terraform apply
-
-# Get the AWS credentials (sensitive output)
-terraform output -json
-
-# Return to project root
-cd ..
-```
-
-### 2. AWS Authentication
-
-The application uses AWS credentials discovery chain. Choose one method:
-
-**Option A: AWS SSO (Recommended for development)**
-
-```bash
-# Configure AWS SSO
-aws configure sso
-
-# Login to create temporary credentials
-aws sso login
-```
-
-**Option B: AWS CLI Profile**
-
-```bash
-# Configure AWS CLI with your credentials
-aws configure --profile dicom-poc
-
-# Set the profile in your environment
-export AWS_PROFILE=dicom-poc
-```
-
-**Option C: Environment Variables (if needed)**
-
-```bash
-# Copy the example environment file
-cp .env.example .env
-# Edit .env to add AWS_REGION and HEALTHIMAGING_DATASTORE_ID
 ```
 
 ### 3. Backend Setup
@@ -110,4 +65,4 @@ curl "http://localhost:3000/view/mock-image-set-1?datastoreId=test-datastore"
 
 ## License
 
-_License information to be determined._
+This project is licensed under the MIT License.
