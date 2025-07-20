@@ -27,7 +27,7 @@ const getImageSetMetadata = async (req, res) => {
     }
 
     // For development/mock mode
-    if (process.env.NODE_ENV === 'development' || !process.env.AWS_ACCESS_KEY_ID) {
+    if (process.env.NODE_ENV === 'development') {
       const mockMetadata = {
         success: true,
         data: {
@@ -111,7 +111,7 @@ const getImageFrame = async (req, res) => {
     }
 
     // For development/mock mode
-    if (process.env.NODE_ENV === 'development' || !process.env.AWS_ACCESS_KEY_ID) {
+    if (process.env.NODE_ENV === 'development') {
       console.log(`[MOCK] Accessing frame ${frameId} for image set: ${id}`);
       
       // Return a placeholder response for now

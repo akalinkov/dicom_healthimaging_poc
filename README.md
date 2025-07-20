@@ -84,15 +84,33 @@ terraform output -json
 cd ..
 ```
 
-### 2. Environment Configuration
+### 2. AWS Authentication
 
+The application uses AWS credentials discovery chain. Choose one method:
+
+**Option A: AWS SSO (Recommended for development)**
+```bash
+# Configure AWS SSO
+aws configure sso
+
+# Login to create temporary credentials
+aws sso login
+```
+
+**Option B: AWS CLI Profile**
+```bash
+# Configure AWS CLI with your credentials
+aws configure --profile dicom-poc
+
+# Set the profile in your environment
+export AWS_PROFILE=dicom-poc
+```
+
+**Option C: Environment Variables (if needed)**
 ```bash
 # Copy the example environment file
 cp .env.example .env
-
-# Add the AWS credentials from Terraform output to .env
-# AWS_ACCESS_KEY_ID=your_access_key_here
-# AWS_SECRET_ACCESS_KEY=your_secret_key_here
+# Edit .env to add AWS_REGION and HEALTHIMAGING_DATASTORE_ID
 ```
 
 ### 3. Local Development (Docker)

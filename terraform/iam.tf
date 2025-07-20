@@ -11,7 +11,10 @@ resource "aws_iam_policy" "healthimaging_policy" {
         Action = [
           "medical-imaging:SearchImageSets",
           "medical-imaging:GetImageSetMetadata",
-          "medical-imaging:GetImageFrame"
+          "medical-imaging:GetImageFrame",
+          "medical-imaging:ListDatastores",
+          "medical-imaging:GetDatastore",
+          "medical-imaging:ListImageSetVersions"
         ]
         Resource = "*"
         Condition = {

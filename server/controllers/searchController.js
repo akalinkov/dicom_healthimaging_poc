@@ -20,7 +20,7 @@ const searchImageSets = async (req, res) => {
     }
 
     // For now, return mock data until AWS HealthImaging datastore is set up
-    if (process.env.NODE_ENV === 'development' || !process.env.AWS_ACCESS_KEY_ID) {
+    if (process.env.NODE_ENV === 'development') {
       const mockResults = {
         success: true,
         data: {

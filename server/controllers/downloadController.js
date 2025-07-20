@@ -17,7 +17,7 @@ const downloadImageFrame = async (req, res) => {
     }
 
     // For development/mock mode
-    if (process.env.NODE_ENV === 'development' || !process.env.AWS_ACCESS_KEY_ID) {
+    if (process.env.NODE_ENV === 'development') {
       console.log(`[MOCK] Downloading frame ${frameId} for image set: ${id}`);
       
       // Simulate a download of a DICOM frame
