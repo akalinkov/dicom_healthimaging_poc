@@ -94,6 +94,3 @@ terraform/*.auto.tfvars
 server/node_modules/
 server/.env
 server/package-lock.json
-
-# Docker
-.dockerignore

@@ -49,7 +49,6 @@ This POC consists of:
 
 - **Terraform Infrastructure**: IAM policies and users with least privilege access
 - **Express.js Backend**: RESTful API with AWS HealthImaging SDK integration
-- **Docker Setup**: Containerized development environment
 - **Mock Mode**: Development mode with simulated responses
 
 ## API Endpoints
@@ -113,19 +112,7 @@ cp .env.example .env
 # Edit .env to add AWS_REGION and HEALTHIMAGING_DATASTORE_ID
 ```
 
-### 3. Local Development (Docker)
-
-```bash
-# Build and run with Docker Compose
-docker-compose up --build
-
-# Or run without Docker:
-cd server
-npm install
-npm run dev
-```
-
-### 4. Local Development (Node.js)
+### 3. Local Development
 
 ```bash
 cd server
