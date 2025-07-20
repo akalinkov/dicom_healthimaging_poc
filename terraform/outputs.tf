@@ -3,6 +3,11 @@ output "aws_region" {
   value       = var.aws_region
 }
 
+output "s3_bucket_name" {
+  description = "Name of the S3 bucket for DICOM files"
+  value       = aws_s3_bucket.dicom_files.bucket
+}
+
 # Instructions for setup
 output "setup_instructions" {
   description = "Instructions for setting up local development"

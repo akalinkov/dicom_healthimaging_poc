@@ -3,9 +3,10 @@ resource "awscc_healthimaging_datastore" "dicom_datastore" {
   datastore_name = "${var.project_name}-datastore"
 
   tags = {
-    Project     = var.project_name
-    Environment = var.environment
-    Purpose     = "DICOM Medical Imaging Storage"
+    ProvisionedBy = "terraform"
+    Environment   = var.environment
+    Project       = var.project_name
+    Purpose       = "DICOM Medical Imaging Storage"
   }
 }
 
