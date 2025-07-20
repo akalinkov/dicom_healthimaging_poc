@@ -12,14 +12,14 @@ const downloadImageFrame = async (req, res) => {
     if (!id || !frameId) {
       return res.status(400).json({
         success: false,
-        message: 'Image set ID and frame ID are required'
+        message: 'Image set ID and frame ID are required',
       });
     }
 
     // For development/mock mode
     if (process.env.NODE_ENV === 'development') {
       console.log(`[MOCK] Downloading frame ${frameId} for image set: ${id}`);
-      
+
       // Simulate a download of a DICOM frame
       return res.json({
         success: true,
@@ -27,8 +27,8 @@ const downloadImageFrame = async (req, res) => {
         downloadUrl: `https://placeholder-dicom-viewer.com/download/${id}/${frameId}`,
         metadata: {
           imageSetId: id,
-          frameId: frameId
-        }
+          frameId: frameId,
+        },
       });
     }
 
@@ -37,20 +37,18 @@ const downloadImageFrame = async (req, res) => {
 
     res.json({
       success: true,
-      message: `Image frame ${frameId} downloaded` // You would typically stream or send the actual file here
+      message: `Image frame ${frameId} downloaded`, // You would typically stream or send the actual file here
     });
-
   } catch (error) {
     console.error('Download error:', error);
     res.status(500).json({
       success: false,
       message: 'Error downloading image frame',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
     });
   }
 };
 
 module.exports = {
-  downloadImageFrame
+  downloadImageFrame,
 };
-

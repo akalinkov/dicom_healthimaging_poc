@@ -1,10 +1,10 @@
 // server/services/aws.js
 
-const { 
-  MedicalImagingClient, 
+const {
+  MedicalImagingClient,
   SearchImageSetsCommand,
   GetImageSetMetadataCommand,
-  GetImageFrameCommand
+  GetImageFrameCommand,
 } = require('@aws-sdk/client-medical-imaging');
 
 class HealthImagingService {
@@ -25,8 +25,8 @@ class HealthImagingService {
       const command = new SearchImageSetsCommand({
         datastoreId,
         searchCriteria: {
-          filters: this.buildSearchFilters(searchCriteria)
-        }
+          filters: this.buildSearchFilters(searchCriteria),
+        },
       });
 
       const response = await this.client.send(command);
@@ -47,7 +47,7 @@ class HealthImagingService {
     try {
       const command = new GetImageSetMetadataCommand({
         datastoreId,
-        imageSetId
+        imageSetId,
       });
 
       const response = await this.client.send(command);
@@ -70,7 +70,7 @@ class HealthImagingService {
       const command = new GetImageFrameCommand({
         datastoreId,
         imageSetId,
-        imageFrameInformation: frameParams
+        imageFrameInformation: frameParams,
       });
 
       const response = await this.client.send(command);
@@ -92,28 +92,28 @@ class HealthImagingService {
     if (searchCriteria.patientName) {
       filters.push({
         values: [{ DICOMPatientName: searchCriteria.patientName }],
-        operator: 'EQUAL'
+        operator: 'EQUAL',
       });
     }
 
     if (searchCriteria.modality) {
       filters.push({
         values: [{ DICOMModality: searchCriteria.modality }],
-        operator: 'EQUAL'
+        operator: 'EQUAL',
       });
     }
 
     if (searchCriteria.studyDate) {
       filters.push({
         values: [{ DICOMStudyDate: searchCriteria.studyDate }],
-        operator: 'EQUAL'
+        operator: 'EQUAL',
       });
     }
 
     if (searchCriteria.patientId) {
       filters.push({
         values: [{ DICOMPatientId: searchCriteria.patientId }],
-        operator: 'EQUAL'
+        operator: 'EQUAL',
       });
     }
 

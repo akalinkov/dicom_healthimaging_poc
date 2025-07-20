@@ -1,55 +1,13 @@
 # DICOM HealthImaging POC
 
-## Project Overview
-
-This is a Proof of Concept (POC) project that demonstrates the integration of a Single Page Application (SPA) with AWS HealthImaging service. The project aims to validate the feasibility of building a medical imaging solution that can interact with DICOM datastores in AWS.
-
-## Objectives
-
-The primary goals of this POC are to:
-
-1. **Search Functionality**: Confirm the ability to search a DICOM datastore for medical images using metadata criteria
-2. **Image Viewing**: Demonstrate the capability to retrieve and display DICOM files in a web-based user interface
-3. **AWS Integration**: Validate the integration patterns between a web application and AWS HealthImaging services
-
-## Key Features
-
-- Search DICOM studies and series by metadata (patient ID, study date, modality, etc.)
-- Retrieve and display medical images in a web browser
-- Demonstrate secure access to AWS HealthImaging resources
-- Provide a foundation for future medical imaging application development
-
-## Technology Stack
-
-- **Frontend**: Single Page Application (SPA)
-- **Backend**: AWS HealthImaging
-- **Cloud Platform**: Amazon Web Services (AWS)
-- **Image Format**: DICOM (Digital Imaging and Communications in Medicine)
-
-## Use Cases
-
-This POC addresses common medical imaging workflows:
-- Radiologists searching for patient studies
-- Viewing medical images for diagnostic purposes
-- Integrating medical imaging into healthcare applications
-
-## Project Status
-
-This is a proof of concept project intended to validate technical feasibility and integration patterns with AWS HealthImaging.
-
-## Prerequisites
-
-- AWS Account with HealthImaging service access
-- DICOM test data imported into AWS HealthImaging datastore
-- Appropriate AWS IAM permissions for HealthImaging operations
+Proof of concept demonstrating React frontend integration with AWS HealthImaging service for medical imaging workflows.
 
 ## Architecture
 
-This POC consists of:
-
-- **Terraform Infrastructure**: IAM policies and users with least privilege access
-- **Express.js Backend**: RESTful API with AWS HealthImaging SDK integration
-- **Mock Mode**: Development mode with simulated responses
+- **React Frontend**: Search interface and results display
+- **Express.js Backend**: RESTful API with AWS HealthImaging SDK integration  
+- **Terraform Infrastructure**: HealthImaging datastore provisioning
+- **Mock Mode**: Development mode with simulated data
 
 ## API Endpoints
 
@@ -88,6 +46,7 @@ cd ..
 The application uses AWS credentials discovery chain. Choose one method:
 
 **Option A: AWS SSO (Recommended for development)**
+
 ```bash
 # Configure AWS SSO
 aws configure sso
@@ -97,6 +56,7 @@ aws sso login
 ```
 
 **Option B: AWS CLI Profile**
+
 ```bash
 # Configure AWS CLI with your credentials
 aws configure --profile dicom-poc
@@ -106,16 +66,25 @@ export AWS_PROFILE=dicom-poc
 ```
 
 **Option C: Environment Variables (if needed)**
+
 ```bash
 # Copy the example environment file
 cp .env.example .env
 # Edit .env to add AWS_REGION and HEALTHIMAGING_DATASTORE_ID
 ```
 
-### 3. Local Development
+### 3. Backend Setup
 
 ```bash
 cd server
+npm install
+npm run dev
+```
+
+### 4. Frontend Setup
+
+```bash
+cd frontend
 npm install
 npm run dev
 ```

@@ -15,14 +15,14 @@ const getImageSetMetadata = async (req, res) => {
     if (!id) {
       return res.status(400).json({
         success: false,
-        message: 'Image set ID is required'
+        message: 'Image set ID is required',
       });
     }
 
     if (!datastoreId) {
       return res.status(400).json({
         success: false,
-        message: 'datastoreId query parameter is required'
+        message: 'datastoreId query parameter is required',
       });
     }
 
@@ -39,13 +39,13 @@ const getImageSetMetadata = async (req, res) => {
               name: 'John Doe',
               id: '12345',
               birthDate: '1980-01-01',
-              sex: 'M'
+              sex: 'M',
             },
             study: {
               date: '20240101',
               time: '120000',
               description: 'Sample CT Study',
-              instanceUID: '1.2.3.4.5.6.7.8.9.0.1'
+              instanceUID: '1.2.3.4.5.6.7.8.9.0.1',
             },
             series: [
               {
@@ -56,12 +56,12 @@ const getImageSetMetadata = async (req, res) => {
                 frameUrls: [
                   `/download/${id}/frame/1`,
                   `/download/${id}/frame/2`,
-                  `/download/${id}/frame/3`
-                ]
-              }
-            ]
-          }
-        }
+                  `/download/${id}/frame/3`,
+                ],
+              },
+            ],
+          },
+        },
       };
 
       console.log(`[MOCK] Viewing image set: ${id} from datastore: ${datastoreId}`);
@@ -73,15 +73,14 @@ const getImageSetMetadata = async (req, res) => {
 
     res.json({
       success: true,
-      data: metadata
+      data: metadata,
     });
-
   } catch (error) {
     console.error('View error:', error);
     res.status(500).json({
       success: false,
       message: 'Error retrieving image set metadata',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
     });
   }
 };
@@ -99,21 +98,21 @@ const getImageFrame = async (req, res) => {
     if (!id || !frameId) {
       return res.status(400).json({
         success: false,
-        message: 'Image set ID and frame ID are required'
+        message: 'Image set ID and frame ID are required',
       });
     }
 
     if (!datastoreId) {
       return res.status(400).json({
         success: false,
-        message: 'datastoreId query parameter is required'
+        message: 'datastoreId query parameter is required',
       });
     }
 
     // For development/mock mode
     if (process.env.NODE_ENV === 'development') {
       console.log(`[MOCK] Accessing frame ${frameId} for image set: ${id}`);
-      
+
       // Return a placeholder response for now
       return res.json({
         success: true,
@@ -122,34 +121,33 @@ const getImageFrame = async (req, res) => {
         metadata: {
           imageSetId: id,
           frameId: frameId,
-          datastoreId: datastoreId
-        }
+          datastoreId: datastoreId,
+        },
       });
     }
 
     // Real AWS HealthImaging frame retrieval
     const frameParams = {
-      imageFrameId: frameId
+      imageFrameId: frameId,
     };
 
     const frameData = await healthImagingService.getImageFrame(datastoreId, id, frameParams);
 
     res.json({
       success: true,
-      data: frameData
+      data: frameData,
     });
-
   } catch (error) {
     console.error('Frame retrieval error:', error);
     res.status(500).json({
       success: false,
       message: 'Error retrieving image frame',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
     });
   }
 };
 
 module.exports = {
   getImageSetMetadata,
-  getImageFrame
+  getImageFrame,
 };

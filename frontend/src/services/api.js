@@ -11,7 +11,7 @@ class ApiService {
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
     const requestId = Math.random().toString(36).substr(2, 9);
-    
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -21,43 +21,43 @@ class ApiService {
       ...options,
     };
 
-    logger.debug('Making API request', { 
-      requestId, 
-      method: config.method || 'GET', 
+    logger.debug('Making API request', {
+      requestId,
+      method: config.method || 'GET',
       url,
-      hasBody: !!config.body 
+      hasBody: !!config.body,
     });
 
     try {
       const startTime = performance.now();
       const response = await fetch(url, config);
       const duration = Math.round(performance.now() - startTime);
-      
+
       if (!response.ok) {
         logger.error('API request failed', {
           requestId,
           status: response.status,
           statusText: response.statusText,
           url,
-          duration
+          duration,
         });
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
-      logger.info('API request successful', { 
-        requestId, 
-        status: response.status, 
+      logger.info('API request successful', {
+        requestId,
+        status: response.status,
         url,
-        duration 
+        duration,
       });
-      
+
       return data;
     } catch (error) {
       logger.error('API request error', {
         requestId,
         url,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }

@@ -31,7 +31,7 @@ app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'dicom-healthimaging-poc-backend'
+    service: 'dicom-healthimaging-poc-backend',
   });
 });
 

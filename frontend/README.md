@@ -1,80 +1,48 @@
-# DICOM HealthImaging POC - Frontend
+# Frontend
 
-A modern React frontend for the DICOM HealthImaging proof-of-concept, built with Vite and Tailwind CSS.
+React frontend for DICOM HealthImaging POC, built with Vite and Tailwind CSS.
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-
-### Installation & Development
+## Quick Start
 
 ```bash
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`
+Runs on `http://localhost:5173`
 
-### Environment Configuration
+## Environment
 
-1. Copy the example environment file:
 ```bash
 cp .env.example .env
 ```
 
-2. Update the API base URL if needed:
-```
-VITE_API_BASE_URL=http://localhost:3000
-```
+Update `VITE_API_BASE_URL` if backend runs on different port.
 
-## 🏗️ Project Structure
+## Structure
 
 ```
 src/
 ├── components/
-│   ├── SearchForm.jsx     # DICOM search form with patient name and modality
+│   ├── SearchForm.jsx     # Search form with patient name and modality
 │   └── ResultsTable.jsx   # Results table with view/download actions
 ├── services/
-│   ├── api.js            # API client with structured logging
-│   └── logger.js         # Centralized logging service
-├── App.jsx               # Main application component
-├── main.jsx              # Application entry point
+│   ├── api.js            # API client
+│   └── logger.js         # Logging service
+├── App.jsx               # Main component
+├── main.jsx              # Entry point
 └── index.css             # Tailwind CSS with medical theme
 ```
 
-## 🎨 Features
+## Features
 
-- **Medical-grade UI**: Clean, professional interface with medical blue color scheme
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-- **Real-time Search**: Connect to backend API for DICOM study search
-- **Loading States**: Smooth loading indicators and error handling
-- **Toast Notifications**: User feedback for actions (view/download)
-- **Structured Logging**: Consistent logging across all components
+- Responsive design with medical UI theme
+- DICOM study search by patient name and modality
+- Loading states and error handling
+- Toast notifications for user feedback
 
-## 🔧 Available Scripts
+## Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build locally
-
-## 🎯 API Integration
-
-The frontend connects to the backend API at `/search` endpoint. Mock data is displayed when the backend is in development mode.
-
-**Search Parameters:**
-- `patientName` - Patient name (optional)
-- `modality` - Medical imaging modality (optional)
-- `datastoreId` - AWS HealthImaging datastore ID (auto-filled for POC)
-
-## 📱 Responsive Breakpoints
-
-- Mobile: `< 768px`
-- Tablet: `768px - 1024px` 
-- Desktop: `> 1024px`
-
-All components are fully responsive and optimized for different screen sizes.
+- `npm run dev` - Development server
+- `npm run build` - Production build
+- `npm run preview` - Preview build

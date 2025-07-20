@@ -15,7 +15,7 @@ const searchImageSets = async (req, res) => {
     if (!datastoreId) {
       return res.status(400).json({
         success: false,
-        message: 'datastoreId is required'
+        message: 'datastoreId is required',
       });
     }
 
@@ -35,8 +35,8 @@ const searchImageSets = async (req, res) => {
                 DICOMPatientId: patientId || '12345',
                 DICOMStudyDate: studyDate || '20240101',
                 DICOMModality: modality || 'CT',
-                DICOMStudyDescription: 'Sample CT Study'
-              }
+                DICOMStudyDescription: 'Sample CT Study',
+              },
             },
             {
               imageSetId: 'mock-image-set-2',
@@ -48,11 +48,11 @@ const searchImageSets = async (req, res) => {
                 DICOMPatientId: patientId || '67890',
                 DICOMStudyDate: studyDate || '20240102',
                 DICOMModality: modality || 'MRI',
-                DICOMStudyDescription: 'Sample MRI Study'
-              }
-            }
-          ]
-        }
+                DICOMStudyDescription: 'Sample MRI Study',
+              },
+            },
+          ],
+        },
       };
 
       return res.json(mockResults);
@@ -63,26 +63,25 @@ const searchImageSets = async (req, res) => {
       patientName,
       modality,
       studyDate,
-      patientId
+      patientId,
     };
 
     const results = await healthImagingService.searchImageSets(datastoreId, searchCriteria);
 
     res.json({
       success: true,
-      data: results
+      data: results,
     });
-
   } catch (error) {
     console.error('Search error:', error);
     res.status(500).json({
       success: false,
       message: 'Error searching image sets',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
     });
   }
 };
 
 module.exports = {
-  searchImageSets
+  searchImageSets,
 };
