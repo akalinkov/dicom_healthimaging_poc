@@ -56,11 +56,10 @@ curl -X POST http://localhost:3000/search \
   -d '{
     "patientName": "John Doe",
     "modality": "CT",
-    "datastoreId": "test-datastore"
   }'
 
 # View image set metadata
-curl "http://localhost:3000/view/mock-image-set-1?datastoreId=test-datastore"
+curl "http://localhost:3000/view/mock-image-set-1"
 ```
 
 ## License

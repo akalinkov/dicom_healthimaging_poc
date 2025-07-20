@@ -1,6 +1,6 @@
 // server/controllers/viewController.js
 
-const healthImagingService = require('../services/aws');
+import healthImagingService from '../services/aws.js';
 
 /**
  * Get image set metadata for viewing
@@ -10,7 +10,6 @@ const healthImagingService = require('../services/aws');
 const getImageSetMetadata = async (req, res) => {
   try {
     const { id } = req.params;
-    const { datastoreId } = req.query;
 
     if (!id) {
       return res.status(400).json({
@@ -19,57 +18,8 @@ const getImageSetMetadata = async (req, res) => {
       });
     }
 
-    if (!datastoreId) {
-      return res.status(400).json({
-        success: false,
-        message: 'datastoreId query parameter is required',
-      });
-    }
-
-    // For development/mock mode
-    if (process.env.NODE_ENV === 'development') {
-      const mockMetadata = {
-        success: true,
-        data: {
-          imageSetId: id,
-          version: 1,
-          datastore: datastoreId,
-          metadata: {
-            patient: {
-              name: 'John Doe',
-              id: '12345',
-              birthDate: '1980-01-01',
-              sex: 'M',
-            },
-            study: {
-              date: '20240101',
-              time: '120000',
-              description: 'Sample CT Study',
-              instanceUID: '1.2.3.4.5.6.7.8.9.0.1',
-            },
-            series: [
-              {
-                instanceUID: '1.2.3.4.5.6.7.8.9.0.2',
-                modality: 'CT',
-                description: 'Axial CT Images',
-                imageCount: 100,
-                frameUrls: [
-                  `/download/${id}/frame/1`,
-                  `/download/${id}/frame/2`,
-                  `/download/${id}/frame/3`,
-                ],
-              },
-            ],
-          },
-        },
-      };
-
-      console.log(`[MOCK] Viewing image set: ${id} from datastore: ${datastoreId}`);
-      return res.json(mockMetadata);
-    }
-
-    // Real AWS HealthImaging metadata retrieval
-    const metadata = await healthImagingService.getImageSetMetadata(datastoreId, id);
+    // Get metadata using HealthImaging service (handles mock vs real data automatically)
+    const metadata = await healthImagingService.getImageSetMetadata(id);
 
     res.json({
       success: true,
@@ -80,7 +30,7 @@ const getImageSetMetadata = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error retrieving image set metadata',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+      error: error.message,
     });
   }
 };
@@ -93,7 +43,6 @@ const getImageSetMetadata = async (req, res) => {
 const getImageFrame = async (req, res) => {
   try {
     const { id, frameId } = req.params;
-    const { datastoreId } = req.query;
 
     if (!id || !frameId) {
       return res.status(400).json({
@@ -102,36 +51,12 @@ const getImageFrame = async (req, res) => {
       });
     }
 
-    if (!datastoreId) {
-      return res.status(400).json({
-        success: false,
-        message: 'datastoreId query parameter is required',
-      });
-    }
-
-    // For development/mock mode
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[MOCK] Accessing frame ${frameId} for image set: ${id}`);
-
-      // Return a placeholder response for now
-      return res.json({
-        success: true,
-        message: `Mock frame ${frameId} for image set ${id}`,
-        frameUrl: `https://placeholder-dicom-viewer.com/frame/${id}/${frameId}`,
-        metadata: {
-          imageSetId: id,
-          frameId: frameId,
-          datastoreId: datastoreId,
-        },
-      });
-    }
-
-    // Real AWS HealthImaging frame retrieval
+    // Get frame data using HealthImaging service (handles mock vs real data automatically)
     const frameParams = {
       imageFrameId: frameId,
     };
 
-    const frameData = await healthImagingService.getImageFrame(datastoreId, id, frameParams);
+    const frameData = await healthImagingService.getImageFrame(id, frameParams);
 
     res.json({
       success: true,
@@ -142,12 +67,12 @@ const getImageFrame = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error retrieving image frame',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+      error: error.message,
     });
   }
 };
 
-module.exports = {
+export {
   getImageSetMetadata,
   getImageFrame,
 };

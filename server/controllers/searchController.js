@@ -1,6 +1,6 @@
 // server/controllers/searchController.js
 
-const healthImagingService = require('../services/aws');
+import healthImagingService from '../services/aws.js';
 
 /**
  * Search for DICOM image sets
@@ -9,56 +9,9 @@ const healthImagingService = require('../services/aws');
  */
 const searchImageSets = async (req, res) => {
   try {
-    const { patientName, modality, studyDate, patientId, datastoreId } = req.body;
+    const { patientName, modality, studyDate, patientId } = req.body;
 
-    // Validate required fields
-    if (!datastoreId) {
-      return res.status(400).json({
-        success: false,
-        message: 'datastoreId is required',
-      });
-    }
-
-    // For now, return mock data until AWS HealthImaging datastore is set up
-    if (process.env.NODE_ENV === 'development') {
-      const mockResults = {
-        success: true,
-        data: {
-          imageSetsMetadataSummaries: [
-            {
-              imageSetId: 'mock-image-set-1',
-              version: 1,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              DICOMTags: {
-                DICOMPatientName: patientName || 'John Doe',
-                DICOMPatientId: patientId || '12345',
-                DICOMStudyDate: studyDate || '20240101',
-                DICOMModality: modality || 'CT',
-                DICOMStudyDescription: 'Sample CT Study',
-              },
-            },
-            {
-              imageSetId: 'mock-image-set-2',
-              version: 1,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              DICOMTags: {
-                DICOMPatientName: patientName || 'Jane Smith',
-                DICOMPatientId: patientId || '67890',
-                DICOMStudyDate: studyDate || '20240102',
-                DICOMModality: modality || 'MRI',
-                DICOMStudyDescription: 'Sample MRI Study',
-              },
-            },
-          ],
-        },
-      };
-
-      return res.json(mockResults);
-    }
-
-    // Real AWS HealthImaging search
+    // Search using HealthImaging service (handles mock vs real data automatically)
     const searchCriteria = {
       patientName,
       modality,
@@ -66,7 +19,7 @@ const searchImageSets = async (req, res) => {
       patientId,
     };
 
-    const results = await healthImagingService.searchImageSets(datastoreId, searchCriteria);
+    const results = await healthImagingService.searchImageSets(searchCriteria);
 
     res.json({
       success: true,
@@ -77,11 +30,11 @@ const searchImageSets = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error searching image sets',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+      error: error.message,
     });
   }
 };
 
-module.exports = {
+export {
   searchImageSets,
 };

@@ -5,8 +5,7 @@ import logger from '../services/logger.js';
 const SearchForm = ({ onSearch, isLoading }) => {
   const [formData, setFormData] = useState({
     patientName: '',
-    modality: '',
-    datastoreId: 'sample-datastore-id', // Default for POC
+    modality: ''
   });
 
   const handleSubmit = (e) => {
@@ -78,9 +77,6 @@ const SearchForm = ({ onSearch, isLoading }) => {
             </select>
           </div>
         </div>
-
-        {/* Datastore ID (hidden for POC) */}
-        <input type='hidden' name='datastoreId' value={formData.datastoreId} />
 
         {/* Search Button */}
         <div className='flex justify-end'>

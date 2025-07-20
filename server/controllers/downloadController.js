@@ -16,24 +16,8 @@ const downloadImageFrame = async (req, res) => {
       });
     }
 
-    // For development/mock mode
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[MOCK] Downloading frame ${frameId} for image set: ${id}`);
-
-      // Simulate a download of a DICOM frame
-      return res.json({
-        success: true,
-        message: `Mock download for frame ${frameId} of image set ${id}`,
-        downloadUrl: `https://placeholder-dicom-viewer.com/download/${id}/${frameId}`,
-        metadata: {
-          imageSetId: id,
-          frameId: frameId,
-        },
-      });
-    }
-
-    // Real file download logic goes here
-    // const frameData = await healthImagingService.downloadImageFrame(datastoreId, id, frameId);
+    // Handle download (mock mode will return placeholder, real mode would stream actual data)
+    console.log(`Downloading frame ${frameId} for image set: ${id}`);
 
     res.json({
       success: true,
@@ -44,11 +28,11 @@ const downloadImageFrame = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error downloading image frame',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+      error: error.message,
     });
   }
 };
 
-module.exports = {
+export {
   downloadImageFrame,
 };

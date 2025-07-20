@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev:mock": "nodemon index.js --profile=mock",
+    "dev:aws": "nodemon index.js --profile=aws",
     "test": "jest"
   },
   "keywords": [

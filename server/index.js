@@ -1,13 +1,12 @@
 // server/index.js
 
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const morgan = require('morgan');
-const dotenv = require('dotenv');
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import morgan from 'morgan';
 
-// Load environment variables
-dotenv.config();
+// Load configuration (this handles environment loading)
+import config from './config/index.js';
 
 const app = express();
 
@@ -18,9 +17,9 @@ app.use(express.json());
 app.use(morgan('common'));
 
 // Routes
-const searchRouter = require('./routes/search');
-const viewRouter = require('./routes/view');
-const downloadRouter = require('./routes/download');
+import searchRouter from './routes/search.js';
+import viewRouter from './routes/view.js';
+import downloadRouter from './routes/download.js';
 
 app.use('/search', searchRouter);
 app.use('/view', viewRouter);
@@ -35,8 +34,11 @@ app.get('/health', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.server.port;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Environment: ${config.environment}`);
+  console.log(`Configuration profile: ${config.configProfile}`);
+  console.log(`Using mock data: ${config.aws.useMockData ? 'Yes' : 'No'}`);
 });

@@ -73,15 +73,15 @@ class ApiService {
   }
 
   // Get image set metadata
-  async getImageSetMetadata(imageSetId, datastoreId) {
-    logger.info('Getting image set metadata', { imageSetId, datastoreId });
-    return this.request(`/view/${imageSetId}?datastoreId=${datastoreId}`);
+  async getImageSetMetadata(imageSetId) {
+    logger.info('Getting image set metadata', { imageSetId });
+    return this.request(`/view/${imageSetId}`);
   }
 
   // Get image frame
-  async getImageFrame(imageSetId, frameId, datastoreId) {
-    logger.info('Getting image frame', { imageSetId, frameId, datastoreId });
-    return this.request(`/view/${imageSetId}/frame/${frameId}?datastoreId=${datastoreId}`);
+  async getImageFrame(imageSetId, frameId) {
+    logger.info('Getting image frame', { imageSetId, frameId });
+    return this.request(`/view/${imageSetId}/frame/${frameId}`);
   }
 
   // Download image frame

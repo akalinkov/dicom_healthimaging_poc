@@ -1,35 +1,45 @@
 // server/services/aws.js
 
-const {
+import {
   MedicalImagingClient,
   SearchImageSetsCommand,
   GetImageSetMetadataCommand,
   GetImageFrameCommand,
-} = require('@aws-sdk/client-medical-imaging');
+} from '@aws-sdk/client-medical-imaging';
+
+import config from '../config/index.js';
 
 class HealthImagingService {
   constructor() {
-    this.client = new MedicalImagingClient({
-      region: process.env.AWS_REGION || 'us-east-1',
-    });
+    this.config = config;
+    this.client = new MedicalImagingClient({region: config.aws.region});
   }
 
   /**
    * Search for image sets based on criteria
-   * @param {string} datastoreId - The datastore ID
    * @param {object} searchCriteria - Search criteria (patientName, modality, etc.)
    * @returns {Promise<object>} Search results
    */
-  async searchImageSets(datastoreId, searchCriteria) {
+  async searchImageSets(searchCriteria) {
+    if (this.config.useMockData) {
+      return this.getMockSearchResults(searchCriteria);
+    }
+
     try {
+      // Debug the datastore ID
+      console.log('Using datastore ID:', JSON.stringify(this.config.aws.datastoreId));
+      console.log('Datastore ID length:', this.config.aws.datastoreId?.length);
+      console.log('Datastore ID type:', typeof this.config.aws.datastoreId);
+      
+      // First, try a simple search without any filters to test connectivity
+      console.log('Attempting simple search without filters...');
+      
       const command = new SearchImageSetsCommand({
-        datastoreId,
-        searchCriteria: {
-          filters: this.buildSearchFilters(searchCriteria),
-        },
+        datastoreId: this.config.aws.datastoreId,
       });
 
       const response = await this.client.send(command);
+      console.log('Simple search successful. Response:', response);
       return response;
     } catch (error) {
       console.error('Error searching image sets:', error);
@@ -39,14 +49,17 @@ class HealthImagingService {
 
   /**
    * Get metadata for a specific image set
-   * @param {string} datastoreId - The datastore ID
    * @param {string} imageSetId - The image set ID
    * @returns {Promise<object>} Image set metadata
    */
-  async getImageSetMetadata(datastoreId, imageSetId) {
+  async getImageSetMetadata(imageSetId) {
+    if (this.config.useMockData) {
+      return this.getMockMetadata(imageSetId);
+    }
+
     try {
       const command = new GetImageSetMetadataCommand({
-        datastoreId,
+        datastoreId: this.config.aws.datastoreId,
         imageSetId,
       });
 
@@ -60,15 +73,18 @@ class HealthImagingService {
 
   /**
    * Get a specific image frame
-   * @param {string} datastoreId - The datastore ID
    * @param {string} imageSetId - The image set ID
    * @param {object} frameParams - Frame parameters
    * @returns {Promise<object>} Image frame data
    */
-  async getImageFrame(datastoreId, imageSetId, frameParams) {
+  async getImageFrame(imageSetId, frameParams) {
+    if (this.config.useMockData) {
+      return this.getMockFrameData(imageSetId, frameParams);
+    }
+
     try {
       const command = new GetImageFrameCommand({
-        datastoreId,
+        datastoreId: this.config.aws.datastoreId,
         imageSetId,
         imageFrameInformation: frameParams,
       });
@@ -89,36 +105,97 @@ class HealthImagingService {
   buildSearchFilters(searchCriteria) {
     const filters = [];
 
-    if (searchCriteria.patientName) {
+    if (searchCriteria.patientName && searchCriteria.patientName?.trim()) {
       filters.push({
-        values: [{ DICOMPatientName: searchCriteria.patientName }],
+        values: [{ DICOMPatientName: searchCriteria.patientName.trim() }],
         operator: 'EQUAL',
       });
+    }
+
+    if (searchCriteria.modality && searchCriteria.modality?.trim()) {
+      filters.push({
+        values: [{ DICOMSeriesModality: searchCriteria.modality.trim() }],
+        operator: 'EQUAL',
+      });
+    }
+
+    console.log('Built filters:', JSON.stringify(filters, null, 2));
+    return filters;
+  }
+
+  /**
+   * Get mock search results
+   * @param {object} searchCriteria - Search criteria
+   * @returns {object} Mock search results
+   */
+  getMockSearchResults(searchCriteria) {
+    let results = [...this.config.mockData.imageSets];
+
+    // Filter based on search criteria
+    if (searchCriteria.patientName) {
+      results = results.filter(item => 
+        item.DICOMTags.DICOMPatientName.toLowerCase().includes(searchCriteria.patientName.toLowerCase())
+      );
     }
 
     if (searchCriteria.modality) {
-      filters.push({
-        values: [{ DICOMModality: searchCriteria.modality }],
-        operator: 'EQUAL',
-      });
+      results = results.filter(item => 
+        item.DICOMTags.DICOMModality.toLowerCase() === searchCriteria.modality.toLowerCase()
+      );
     }
 
-    if (searchCriteria.studyDate) {
-      filters.push({
-        values: [{ DICOMStudyDate: searchCriteria.studyDate }],
-        operator: 'EQUAL',
-      });
-    }
+    return {
+      imageSetsMetadataSummaries: results,
+    };
+  }
 
-    if (searchCriteria.patientId) {
-      filters.push({
-        values: [{ DICOMPatientId: searchCriteria.patientId }],
-        operator: 'EQUAL',
-      });
-    }
+  /**
+   * Get mock metadata for an image set
+   * @param {string} imageSetId - Image set ID
+   * @returns {object} Mock metadata
+   */
+  getMockMetadata(imageSetId) {
+    const imageSet = this.config.mockData.imageSets.find(set => set.imageSetId === imageSetId);
+    
+    return {
+      imageSetId,
+      version: 1,
+      datastore: this.config.aws.datastoreId,
+      metadata: {
+        ...this.config.mockData.metadata,
+        patient: {
+          ...this.config.mockData.metadata.patient,
+          name: imageSet?.DICOMTags?.DICOMPatientName || this.config.mockData.metadata.patient.name,
+          id: imageSet?.DICOMTags?.DICOMPatientId || this.config.mockData.metadata.patient.id,
+        },
+        study: {
+          ...this.config.mockData.metadata.study,
+          description: imageSet?.DICOMTags?.DICOMStudyDescription || this.config.mockData.metadata.study.description,
+          instanceUID: imageSet?.DICOMTags?.DICOMStudyInstanceUID || this.config.mockData.metadata.study.instanceUID,
+        },
+      },
+    };
+  }
 
-    return filters;
+  /**
+   * Get mock frame data
+   * @param {string} imageSetId - Image set ID
+   * @param {object} frameParams - Frame parameters
+   * @returns {object} Mock frame data
+   */
+  getMockFrameData(imageSetId, frameParams) {
+    return {
+      imageSetId,
+      frameId: frameParams.imageFrameId,
+      contentType: 'application/dicom',
+      frameUrl: `https://placeholder-dicom-viewer.com/frame/${imageSetId}/${frameParams.imageFrameId}`,
+      metadata: {
+        imageSetId,
+        frameId: frameParams.imageFrameId,
+        datastoreId: this.config.aws.datastoreId,
+      },
+    };
   }
 }
 
-module.exports = new HealthImagingService();
+export default new HealthImagingService();
