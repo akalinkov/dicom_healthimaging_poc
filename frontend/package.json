@@ -10,12 +10,20 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@cornerstonejs/core": "^3.31.6",
+    "@cornerstonejs/dicom-image-loader": "^3.31.6",
+    "@cornerstonejs/nifti-volume-loader": "^3.31.6",
+    "@cornerstonejs/tools": "^3.31.6",
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@tailwindcss/vite": "^4.1.11",
+    "dicom-parser": "^1.8.21",
+    "dwv": "^0.35.1",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-toastify": "^11.0.5",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "vite-plugin-wasm": "^3.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

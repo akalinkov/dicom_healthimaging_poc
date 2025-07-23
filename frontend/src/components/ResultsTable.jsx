@@ -1,6 +1,8 @@
 import { Eye, Download } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 import logger from '../services/logger.js';
+import DicomViewer from './DicomViewer.jsx';
 
 const ModalityBadge = ({ modality }) => {
   const colors = {
@@ -23,10 +25,28 @@ const ModalityBadge = ({ modality }) => {
 };
 
 const ResultsTable = ({ results, isLoading, error }) => {
+  const [viewerState, setViewerState] = useState({
+    isOpen: false,
+    imageSetId: null,
+    patientName: null,
+  });
+
   const handleView = (imageSet) => {
     logger.info('View image set requested', { imageSetId: imageSet.imageSetId });
+    setViewerState({
+      isOpen: true,
+      imageSetId: imageSet.imageSetId,
+      patientName: imageSet.DICOMTags.DICOMPatientName,
+    });
     toast.info(`Opening viewer for ${imageSet.DICOMTags.DICOMPatientName}`);
-    // TODO: Implement actual viewer
+  };
+
+  const handleCloseViewer = () => {
+    setViewerState({
+      isOpen: false,
+      imageSetId: null,
+      patientName: null,
+    });
   };
 
   const handleDownload = (imageSet) => {
@@ -148,6 +168,13 @@ const ResultsTable = ({ results, isLoading, error }) => {
           </tbody>
         </table>
       </div>
+
+      {/* DICOM Viewer Modal */}
+      <DicomViewer
+        imageSetId={viewerState.imageSetId}
+        isOpen={viewerState.isOpen}
+        onClose={handleCloseViewer}
+      />
     </div>
   );
 };

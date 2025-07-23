@@ -64,6 +64,17 @@ class HealthImagingService {
       });
 
       const response = await this.client.send(command);
+      
+      // Handle the metadata blob stream properly
+      if (response.imageSetMetadataBlob) {
+        // Convert stream to buffer
+        const chunks = [];
+        for await (const chunk of response.imageSetMetadataBlob) {
+          chunks.push(chunk);
+        }
+        response.imageSetMetadataBlob = Buffer.concat(chunks);
+      }
+      
       return response;
     } catch (error) {
       console.error('Error getting image set metadata:', error);
@@ -93,6 +104,60 @@ class HealthImagingService {
       return response;
     } catch (error) {
       console.error('Error getting image frame:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get DICOM binary data for a specific image frame
+   * @param {string} datastoreId - The datastore ID
+   * @param {string} imageSetId - The image set ID
+   * @param {object} frameParams - Frame parameters
+   * @returns {Promise<object>} DICOM binary data
+   */
+  async getDicomBinaryData(datastoreId, imageSetId, frameParams) {
+    try {
+      console.log('Getting DICOM binary data:', { datastoreId, imageSetId, frameParams });
+
+      const command = new GetImageFrameCommand({
+        datastoreId,
+        imageSetId,
+        imageFrameInformation: frameParams,
+      });
+
+      const response = await this.client.send(command);
+      
+      // Handle the image frame blob stream properly
+      console.log('AWS response info:', {
+        hasImageFrameBlob: !!response.imageFrameBlob,
+        contentType: response.contentType,
+        contentLength: response.contentLength
+      });
+      
+      if (response.imageFrameBlob) {
+        console.log('Converting imageFrameBlob stream to buffer...');
+        // Convert stream to buffer
+        const chunks = [];
+        for await (const chunk of response.imageFrameBlob) {
+          chunks.push(chunk);
+          console.log('Received chunk of size:', chunk.length);
+        }
+        const buffer = Buffer.concat(chunks);
+        console.log('Total buffer size:', buffer.length);
+        response.imageFrameBlob = buffer;
+      } else {
+        console.log('No imageFrameBlob in response');
+      }
+      
+      // AWS HealthImaging returns the binary image data in the response body
+      return {
+        imageFrameBlob: response.imageFrameBlob,
+        contentType: response.contentType || 'application/dicom',
+        contentLength: response.contentLength || (response.imageFrameBlob ? response.imageFrameBlob.length : undefined),
+        body: response.body, // Readable stream (if any)
+      };
+    } catch (error) {
+      console.error('Error getting DICOM binary data:', error);
       throw error;
     }
   }
