@@ -94,3 +94,6 @@ terraform/*.auto.tfvars
 server/node_modules/
 server/.env
 server/package-lock.json
+
+# Test DICOM files can be massive and we don't need them in the repo
+*.dcm
